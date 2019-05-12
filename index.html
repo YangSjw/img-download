@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head> 
+<img src="https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1752243568,253651337&fm=27&gp=0.jpg" alt="">
+<button onclick="download()">下载图片</button>
+
+<body>
+    <script>
+        function download() {
+            var url = "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1752243568,253651337&fm=27&gp=0.jpg";
+            var xhr = new XMLHttpRequest()
+            //XMLHttpRequest 对象用于在后台与服务器交换数据。
+            //在不重新加载页面的情况下更新网页
+            // 在页面已加载后从服务器请求数据
+            // 在页面已加载后从服务器接收数据
+            // 在后台向服务器发送数据
+            xhr.open("GET", url, true)
+            //XMLHttpRequest.responseType 属性是一个枚举类型的属性，返回响应数据的类型。
+            // 它允许我们手动的设置返回数据的类型。如果我们将它设置为一个空字符串，它将使用默认的"text"类型。
+            //	response 是一个包含二进制数据的 Blob 对象 
+            //详情请看https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/responseType
+            xhr.responseType = "blob"; //返回类型blob
+            //异步请求完成之后执行的函数
+            xhr.onload = function () {
+                if (this.status === 200) {
+                    var blob = this.response;
+                    var reader = new FileReader();
+                    //FileReader通过异步的方式读取文件内容，结果均是通过事件回调获取，下面是一个读取本地txt文件内容的例子：
+                    //详情见https://www.cnblogs.com/hhhyaaon/p/5929492.html
+                    reader.readAsDataURL(blob); // 转换为base64，可以直接放入a表情href
+                    //但是读取完毕后，将读取结果存储在对象的result中
+                    reader.onload = function (e) {
+
+                        // 转换完成，创建一个a标签用于下载
+
+                        var a = document.createElement('a');
+
+                        a.download = 'data.jpg';
+
+                        a.href = e.target.result;
+
+                        // $("body").append(a); // 修复firefox中无法触发click
+
+                        a.click();
+
+                        // $(a).remove();
+
+                    }
+                }
+            }
+            // 发送ajax请求
+            xhr.send()
+        }
+    </script>
+</body>
+
+</html>
